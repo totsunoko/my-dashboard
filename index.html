@@ -125,15 +125,20 @@
         </ul>
     </div>
 
-    <div class="card">
-        <h3>Now Playing</h3>
-        <div style="text-align: center;">
-            <div style="width: 80px; height: 80px; background: var(--accent); margin: 0 auto 15px; border-radius: 10px;"></div>
-            <p style="margin: 5px 0;"><strong>Favorite Song</strong></p>
-            <p style="color: var(--text-sub); font-size: 0.8rem;">Artist Name</p>
-            <div style="font-size: 1.5rem; margin-top: 10px;">⏮️ ⏸️ ⏭️</div>
+    <div class="card" style="grid-column: span 1; padding: 10px; min-height: 250px;">
+        <h3>YouTube Music</h3>
+        <div style="width: 100%; height: 100%; overflow: hidden; border-radius: 12px;">
+            <iframe 
+                width="100%" 
+                height="100%" 
+                src="https://www.youtube.com/embed/videoseries?list=RDCLAK5uy_m6O3fV6T00T6ZJ5G5D2_G1W2_Y_5Y5Y5Y&autoplay=0&loop=1" 
+                title="YouTube Music Player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen>
+            </iframe>
         </div>
-    </div>
+    </div>    
 
     <div class="card">
         <h3>Market Data</h3>
