@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablet Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent: #38bdf8;
+            --success: #4ade80;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            height: 100vh;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* Bento Grid Layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1fr;
+            grid-template-rows: repeat(2, 1fr) 60px;
+            gap: 20px;
+            height: 100%;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* 各パーツの装飾 */
+        .time-card {
+            grid-row: span 1;
+            align-items: center;
+            text-align: center;
+        }
+        #clock { font-size: 4rem; font-weight: bold; margin: 0; }
+        #date { color: var(--accent); font-size: 1.2rem; }
+
+        .control-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .btn {
+            background: #334155;
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            font-size: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn.active { background: var(--accent); color: var(--bg-color); }
+        .btn i { font-size: 1.5rem; margin-bottom: 8px; }
+
+        .info-list { list-style: none; padding: 0; margin: 0; }
+        .info-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .news-ticker {
+            grid-column: span 3;
+            background: transparent;
+            border: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        h3 { margin-top: 0; color: var(--text-sub); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <div class="card time-card">
+        <p id="date">March 6, 2026</p>
+        <h1 id="clock">00:00</h1>
+        <p>☀️ 18°C / Tokyo</p>
+    </div>
+
+    <div class="card">
+        <h3>Smart Home Control</h3>
+        <div class="control-grid">
+            <button class="btn active"><span>💡</span> Living</button>
+            <button class="btn"><span>💡</span> Kitchen</button>
+            <button class="btn active"><span>🌡️</span> 24°C</button>
+            <button class="btn"><span>🔒</span> Locked</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>ToDo List</h3>
+        <ul class="info-list">
+            <li><span>✅ 牛乳を買う</span></li>
+            <li><span>⬜️ 企画書の送付</span></li>
+            <li><span>⬜️ ジムの予約</span></li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3>Now Playing</h3>
+        <div style="text-align: center;">
+            <div style="width: 80px; height: 80px; background: var(--accent); margin: 0 auto 15px; border-radius: 10px;"></div>
+            <p style="margin: 5px 0;"><strong>Favorite Song</strong></p>
+            <p style="color: var(--text-sub); font-size: 0.8rem;">Artist Name</p>
+            <div style="font-size: 1.5rem; margin-top: 10px;">⏮️ ⏸️ ⏭️</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Market Data</h3>
+        <ul class="info-list">
+            <li><span>Nikkei 225</span> <span style="color: var(--success);">39,240</span></li>
+            <li><span>USD / JPY</span> <span>150.42</span></li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3>System Status</h3>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="flex: 1; height: 10px; background: #334155; border-radius: 5px; overflow: hidden;">
+                <div style="width: 85%; height: 100%; background: var(--success);"></div>
+            </div>
+            <span>85%</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-sub); margin-top: 10px;">Connected to "Home_Wi-Fi_5G"</p>
+    </div>
+
+    <div class="news-ticker">
+        <marquee>📢 最新ニュース：ダッシュボードのデザインが完成しました！ / 天気：明日は晴れのち曇りです / 株価は安定しています...</marquee>
+    </div>
+</div>
+
+<script>
+    function updateTime() {
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2, '0');
+        const m = String(now.getMinutes()).padStart(2, '0');
+        document.getElementById('clock').textContent = `${h}:${m}`;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+</script>
+
+</body>
+</html>
