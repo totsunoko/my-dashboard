@@ -1,29 +1,20 @@
-# ファイル分割とリファクタリング計画
+# 焼付き防止機能の実装計画
 
-肥大化した `index.html` を適切に分割し、メンテナンス性を向上させます。
+長時間、特定の要素（特に高コントラストな時計など）が同じ位置に表示されるのを防ぐための対策を講じます。
 
 ## Proposed Changes
 
-### ディレクトリ構成の変更
-以下の構成に変更します。
-```text
-/my-dashboard/
-  ├── index.html
-  ├── css/
-  │    └── style.css
-  └── js/
-       └── app.js
-```
+### 1. ピクセルシフト (Pixel Shifting)
+- **仕組み**: 1分ごとに、ダッシュボード全体の表示位置（`transform: translate`）を数ピクセル（例: -2px 〜 2px）ランダムに移動させます。
+- **対象**: ダッシュボード全体のコンテナ、または特に高いコントラストを持つ時計カード。
+- **効果**: 同一のピクセルが長時間同じ色を発光し続けるのを防ぎます。
 
-### [NEW] [style.css](file:///home/totsuka/git_repository/my-dashboard/css/style.css)
-- `index.html` 内の `<style>` ブロックから全CSSを抽出。
+### 2. 輝度と色の微細な変動
+- **仕組み**: CSSのアニメーション（`breathing` 効果）を使用して、背景の明るさやアクセントカラーの彩度を、視認できないほどゆっくり（例: 5〜10分周期）変化させます。
 
-### [NEW] [app.js](file:///home/totsuka/git_repository/my-dashboard/js/app.js)
-- `index.html` 内の `<script>` ブロックから全JavaScript（時計、カレンダー、スリープ防止等）を抽出。
-
-### [MODIFY] [index.html](file:///home/totsuka/git_repository/my-dashboard/index.html)
-- 内部の `<style>` および `<script>` タグを削除し、外部ファイルとしてリンクするように変更。
+### 3. 深夜の自動減光 (Night Mode/Dimming)
+- **仕組み**: 深夜の時間帯（例: 0:00〜6:00）に、全体の透明度を下げる、または輝度を落とすスタイルを適用します。
 
 ## Verification Plan
-1. `python3 -m http.server` を使用して、分割後もデザインや機能（時計、アニメーション、スリープ防止）が正常に動作することを確認。
-2. ブラウザのデベロッパーツールで外部ファイルが正しくロードされていることを確認。
+1. 開発者ツールを使用し、1分ごとにコンテナの `transform` 値が変化していることを確認。
+2. アニメーションが非常に滑らかで、ユーザーの体験（UX）を損なわないことを確認。

@@ -87,12 +87,31 @@ document.addEventListener('visibilitychange', async () => {
     }
 });
 
+// --- Burn-in Prevention (Pixel Shift) ---
+function startPixelShift() {
+    const dashboard = document.querySelector('.dashboard');
+    if (!dashboard) return;
+
+    const shift = () => {
+        // -3px 〜 3px の間でランダムに移動
+        const x = (Math.random() - 0.5) * 6;
+        const y = (Math.random() - 0.5) * 6;
+        dashboard.style.transform = `translate(${x}px, ${y}px)`;
+        console.log(`Pixel shift applied: ${x.toFixed(2)}px, ${y.toFixed(2)}px`);
+    };
+
+    // 1分ごとに移動
+    setInterval(shift, 60000);
+    shift(); // 初回実行
+}
+
 // Initialize
 function init() {
     setInterval(updateTime, 1000);
     updateTime();
     updateCalendar();
     requestWakeLock();
+    startPixelShift();
 
     // Browser support for Border Animation (Chrome/Edge)
     if (window.CSS && CSS.registerProperty) {
