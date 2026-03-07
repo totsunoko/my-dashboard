@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,7 +39,7 @@
             background-color: var(--card-bg);
             border-radius: 20px;
             padding: 24px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -49,15 +50,76 @@
             grid-row: span 1;
             align-items: center;
             text-align: center;
+            background: linear-gradient(135deg, var(--card-bg), #2d3748);
         }
-        #clock { font-size: 4rem; font-weight: bold; margin: 0; }
-        #date { color: var(--accent); font-size: 1.2rem; }
+
+        #clock {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin: 0;
+            font-variant-numeric: tabular-nums;
+        }
+
+        #clock span {
+            font-size: 1.8rem;
+            color: var(--text-sub);
+            margin-left: 4px;
+        }
+
+        #date {
+            color: var(--accent);
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        /* カレンダーカードのスタイル */
+        .calendar-card {
+            grid-row: span 1;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        .calendar-day-label {
+            color: var(--text-sub);
+            font-weight: bold;
+            padding-bottom: 5px;
+        }
+
+        .calendar-date {
+            padding: 5px 0;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .calendar-date.today {
+            background-color: var(--accent);
+            color: var(--bg-color);
+            font-weight: bold;
+        }
+
+        .calendar-date.other-month {
+            color: #475569;
+        }
 
         .control-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
+
         .btn {
             background: #334155;
             border: none;
@@ -71,10 +133,23 @@
             cursor: pointer;
             transition: 0.3s;
         }
-        .btn.active { background: var(--accent); color: var(--bg-color); }
-        .btn i { font-size: 1.5rem; margin-bottom: 8px; }
 
-        .info-list { list-style: none; padding: 0; margin: 0; }
+        .btn.active {
+            background: var(--accent);
+            color: var(--bg-color);
+        }
+
+        .btn i {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
         .info-list li {
             padding: 10px 0;
             border-bottom: 1px solid #334155;
@@ -93,87 +168,163 @@
             overflow: hidden;
         }
 
-        h3 { margin-top: 0; color: var(--text-sub); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
-
+        h3 {
+            margin-top: 0;
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
+
 <body>
 
-<div class="dashboard">
-    <div class="card time-card">
-        <p id="date">March 6, 2026</p>
-        <h1 id="clock">00:00</h1>
-        <p>☀️ 18°C / Tokyo</p>
-    </div>
-
-    <div class="card">
-        <h3>Smart Home Control</h3>
-        <div class="control-grid">
-            <button class="btn active"><span>💡</span> Living</button>
-            <button class="btn"><span>💡</span> Kitchen</button>
-            <button class="btn active"><span>🌡️</span> 24°C</button>
-            <button class="btn"><span>🔒</span> Locked</button>
+    <div class="dashboard">
+        <div class="card time-card">
+            <p id="date">-- --, ----</p>
+            <h1 id="clock">00:00<span>00</span></h1>
+            <p>☀️ 18°C / Tokyo</p>
         </div>
-    </div>
 
-    <div class="card">
-        <h3>ToDo List</h3>
-        <ul class="info-list">
-            <li><span>✅ 牛乳を買う</span></li>
-            <li><span>⬜️ 企画書の送付</span></li>
-            <li><span>⬜️ ジムの予約</span></li>
-        </ul>
-    </div>
-
-    <div class="card" style="grid-column: span 1; padding: 10px; min-height: 250px;">
-        <h3>YouTube Music</h3>
-        <div style="width: 100%; height: 100%; overflow: hidden; border-radius: 12px;">
-            <iframe 
-                width="100%" 
-                height="100%" 
-                src="https://www.youtube.com/embed/videoseries?list=RDCLAK5uy_m6O3fV6T00T6ZJ5G5D2_G1W2_Y_5Y5Y5Y&autoplay=0&loop=1" 
-                title="YouTube Music Player" 
-                frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                allowfullscreen>
-            </iframe>
-        </div>
-    </div>    
-
-    <div class="card">
-        <h3>Market Data</h3>
-        <ul class="info-list">
-            <li><span>Nikkei 225</span> <span style="color: var(--success);">39,240</span></li>
-            <li><span>USD / JPY</span> <span>150.42</span></li>
-        </ul>
-    </div>
-
-    <div class="card">
-        <h3>System Status</h3>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="flex: 1; height: 10px; background: #334155; border-radius: 5px; overflow: hidden;">
-                <div style="width: 85%; height: 100%; background: var(--success);"></div>
+        <div class="card">
+            <h3>Smart Home Control</h3>
+            <div class="control-grid">
+                <button class="btn active"><span>💡</span> Living</button>
+                <button class="btn"><span>💡</span> Kitchen</button>
+                <button class="btn active"><span>🌡️</span> 24°C</button>
+                <button class="btn"><span>🔒</span> Locked</button>
             </div>
-            <span>85%</span>
         </div>
-        <p style="font-size: 0.8rem; color: var(--text-sub); margin-top: 10px;">Connected to "Home_Wi-Fi_5G"</p>
+
+        <div class="card">
+            <h3>ToDo List</h3>
+            <ul class="info-list">
+                <li><span>✅ 牛乳を買う</span></li>
+                <li><span>⬜️ 企画書の送付</span></li>
+                <li><span>⬜️ ジムの予約</span></li>
+            </ul>
+        </div>
+
+        <div class="card" style="grid-column: span 1; padding: 10px; min-height: 250px;">
+            <h3>YouTube Music</h3>
+            <div style="width: 100%; height: 100%; overflow: hidden; border-radius: 12px;">
+                <iframe width="100%" height="100%"
+                    src="https://www.youtube.com/embed/videoseries?list=RDCLAK5uy_m6O3fV6T00T6ZJ5G5D2_G1W2_Y_5Y5Y5Y&autoplay=0&loop=1"
+                    title="YouTube Music Player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Market Data</h3>
+            <ul class="info-list">
+                <li><span>Nikkei 225</span> <span style="color: var(--success);">39,240</span></li>
+                <li><span>USD / JPY</span> <span>150.42</span></li>
+            </ul>
+        </div>
+
+        <div class="card calendar-card">
+            <div class="calendar-header">
+                <h3 id="cal-month" style="margin: 0;">March 2026</h3>
+            </div>
+            <div class="calendar-grid" id="calendar-body">
+                <!-- カレンダーの中身はJSで生成 -->
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>System Status</h3>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="flex: 1; height: 10px; background: #334155; border-radius: 5px; overflow: hidden;">
+                    <div style="width: 85%; height: 100%; background: var(--success);"></div>
+                </div>
+                <span>85%</span>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-sub); margin-top: 10px;">Connected to "Home_Wi-Fi_5G"</p>
+        </div>
+
+        <div class="news-ticker">
+            <marquee>📢 最新ニュース：ダッシュボードのデザインが完成しました！ / 天気：明日は晴れのち曇りです / 株価は安定しています...</marquee>
+        </div>
     </div>
 
-    <div class="news-ticker">
-        <marquee>📢 最新ニュース：ダッシュボードのデザインが完成しました！ / 天気：明日は晴れのち曇りです / 株価は安定しています...</marquee>
-    </div>
-</div>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const options = { month: 'long', day: 'numeric', year: 'numeric' };
+            document.getElementById('date').textContent = now.toLocaleDateString('en-US', options);
 
-<script>
-    function updateTime() {
-        const now = new Date();
-        const h = String(now.getHours()).padStart(2, '0');
-        const m = String(now.getMinutes()).padStart(2, '0');
-        document.getElementById('clock').textContent = `${h}:${m}`;
-    }
-    setInterval(updateTime, 1000);
-    updateTime();
-</script>
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').innerHTML = `${h}:${m}<span>${s}</span>`;
+
+            // 日付が変わったらカレンダーを更新
+            if (h === '00' && m === '00' && s === '00') {
+                updateCalendar();
+            }
+        }
+
+        function updateCalendar() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+            document.getElementById('cal-month').textContent = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const prevDaysInMonth = new Date(year, month, 0).getDate();
+
+            const calendarBody = document.getElementById('calendar-body');
+            calendarBody.innerHTML = '';
+
+            // 曜日のラベル
+            const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            days.forEach(day => {
+                const label = document.createElement('div');
+                label.className = 'calendar-day-label';
+                label.textContent = day;
+                calendarBody.appendChild(label);
+            });
+
+            // 前月の残り
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const div = document.createElement('div');
+                div.className = 'calendar-date other-month';
+                div.textContent = prevDaysInMonth - i;
+                calendarBody.appendChild(div);
+            }
+
+            // 今月の日付
+            for (let i = 1; i <= daysInMonth; i++) {
+                const div = document.createElement('div');
+                div.className = 'calendar-date';
+                if (i === now.getDate()) div.classList.add('today');
+                div.textContent = i;
+                calendarBody.appendChild(div);
+            }
+
+            // 翌月の開始 (42マス埋める)
+            const remaining = 42 - calendarBody.children.length + 7; // +7 はラベル分
+            for (let i = 1; i <= (42 - (calendarBody.children.length - 7)); i++) {
+                const div = document.createElement('div');
+                div.className = 'calendar-date other-month';
+                div.textContent = i;
+                calendarBody.appendChild(div);
+            }
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
+        updateCalendar();
+    </script>
 
 </body>
+
 </html>
