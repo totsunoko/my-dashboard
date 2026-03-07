@@ -66,7 +66,8 @@ function updateCalendar() {
 async function updateWeather() {
     const lat = 35.6895;
     const lon = 139.6917;
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&hourly=temperature_2m,weather_code&timezone=Asia%2FTokyo&forecast_days=1`;
+    // Requesting 3 days of hourly and daily data
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code&hourly=temperature_2m,precipitation_probability,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&forecast_days=3`;
 
     try {
         const response = await fetch(url);
@@ -89,35 +90,81 @@ async function updateWeather() {
         document.getElementById('weather-main-icon').textContent = getWeatherIcon(data.current.weather_code);
         document.getElementById('weather-main-temp').textContent = `${Math.round(data.current.temperature_2m)}°`;
 
-        // Hourly forecast (next 4 intervals, 3 hours apart)
-        const forecastList = document.getElementById('weather-forecast-list');
-        forecastList.innerHTML = '';
-
-        const now = new Date();
-        const currentHour = now.getHours();
-
-        // Find next 4 intervals (3 hours each)
-        for (let i = 1; i <= 4; i++) {
-            const targetHour = (currentHour + i * 3) % 24;
-            // Find index in hourly data
-            // Open-Meteo returns 24 hours starting from 0:00
-            const index = targetHour;
-
-            const timeStr = `${targetHour}:00`;
-            const temp = Math.round(data.hourly.temperature_2m[index]);
-            const icon = getWeatherIcon(data.hourly.weather_code[index]);
-
-            const item = document.createElement('div');
-            item.className = 'forecast-hour';
-            item.innerHTML = `
-                <div class="forecast-time">${timeStr}</div>
-                <div class="forecast-icon">${icon}</div>
-                <div class="forecast-temp">${temp}°</div>
-            `;
-            forecastList.appendChild(item);
+        // Rain probability (using the current hour's probability)
+        const currentRain = data.hourly.precipitation_probability[new Date().getHours()];
+        const rainEl = document.getElementById('weather-rain');
+        if (rainEl) {
+            rainEl.textContent = `降水確率 ${currentRain}%`;
         }
 
-        console.log('Weather updated for Shinjuku');
+        // Hourly forecast (next 4 intervals, 3 hours apart)
+        const hourlyList = document.getElementById('weather-forecast-list');
+        if (hourlyList) {
+            hourlyList.innerHTML = '';
+            const now = new Date();
+            const startTimestamp = now.getTime();
+
+            for (let i = 1; i <= 4; i++) {
+                const targetTime = new Date(startTimestamp + (i * 3 * 60 * 60 * 1000));
+                const targetHour = targetTime.getHours();
+
+                // Adjust to local ISO format for matching Open-Meteo "YYYY-MM-DDTHH:00"
+                const tzOffset = targetTime.getTimezoneOffset() * 60000;
+                const localISO = new Date(targetTime.getTime() - tzOffset).toISOString().split(':')[0] + ':00';
+                const index = data.hourly.time.indexOf(localISO);
+
+                if (index !== -1) {
+                    const timeStr = `${targetHour}:00`;
+                    const temp = Math.round(data.hourly.temperature_2m[index]);
+                    const prob = data.hourly.precipitation_probability[index];
+                    const icon = getWeatherIcon(data.hourly.weather_code[index]);
+
+                    const item = document.createElement('div');
+                    item.className = 'forecast-hour';
+                    item.innerHTML = `
+                        <div class="forecast-time">${timeStr}</div>
+                        <div class="forecast-icon">${icon}</div>
+                        <div class="forecast-temp">${temp}°</div>
+                        <div style="font-size:0.6rem; color:var(--accent); margin-top:4px;">${prob}%</div>
+                    `;
+                    hourlyList.appendChild(item);
+                }
+            }
+        }
+
+        // 3-Day Daily Forecast
+        const dailyList = document.getElementById('weather-daily-list');
+        if (dailyList) {
+            dailyList.innerHTML = '';
+            const dayLabels = ['今日', '明日', '明後日'];
+
+            for (let i = 0; i < 3; i++) {
+                const maxTemp = Math.round(data.daily.temperature_2m_max[i]);
+                const minTemp = Math.round(data.daily.temperature_2m_min[i]);
+                const icon = getWeatherIcon(data.daily.weather_code[i]);
+
+                const item = document.createElement('div');
+                item.className = 'daily-item';
+                item.style.display = 'flex';
+                item.style.justifyContent = 'space-between';
+                item.style.alignItems = 'center';
+                item.style.padding = '8px 0';
+                item.style.fontSize = '0.9rem';
+                item.style.borderTop = i === 0 ? 'none' : '1px solid rgba(255,255,255,0.05)';
+
+                item.innerHTML = `
+                    <div style="width: 50px; color: var(--text-sub);">${dayLabels[i]}</div>
+                    <div style="font-size: 1.2rem;">${icon}</div>
+                    <div style="display: flex; gap: 10px; width: 80px; justify-content: flex-end;">
+                        <span style="color: #ff6b6b;">${maxTemp}°</span>
+                        <span style="color: #4dabf7; opacity: 0.7;">${minTemp}°</span>
+                    </div>
+                `;
+                dailyList.appendChild(item);
+            }
+        }
+
+        console.log('Weather updated for Shinjuku (Real-time & 3-Day)');
     } catch (err) {
         console.error('Failed to fetch weather:', err);
     }

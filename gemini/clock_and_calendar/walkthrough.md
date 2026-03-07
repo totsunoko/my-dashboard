@@ -36,14 +36,16 @@
 - **ライブデータの統合**: Open-Meteo API と連携し、現在の気温・天気に加え、3時間ごとの予報をリアルタイムに取得・表示するようにしました。
 - **自動更新**: 1時間ごとに最新の気象情報を自動取得します。
 
-### リアルタイム天気予報（新宿）の確認
-新宿の座標に基づき、Open-Meteo API から取得したライブデータが表示されています。
+### リアルタイム天気予報（新宿）の修正・拡充
+日付を跨ぐ際のインデックス計算バグを修正し、利便性向上のために以下の情報を追加しました。
+- **降水確率**: 現在および時間別の降水確率を表示。
+- **3日間予報**: 今日・明日・明後日の最高・最低気温と天気をカード下部に追加。
 
-![Shinjuku Weather](/home/totsuka/.gemini/antigravity/brain/0be74aae-38e8-424d-81f1-5a2c3100669f/shinjuku_weather_card_1772863336513.png)
+![Final Weather Check](/home/totsuka/.gemini/antigravity/brain/0be74aae-38e8-424d-81f1-5a2c3100669f/shinjuku_weather_card_final_check_1772864736729.png)
 
 ### 動作確認の記録
-データのロードと表示を確認した際の記録です。
-![Shinjuku Weather Recording](/home/totsuka/.gemini/antigravity/brain/0be74aae-38e8-424d-81f1-5a2c3100669f/shinjuku_weather_verification_1772863281418.webp)
+修正後のデータ取得と表示の安定性を確認した記録です。
+![Final Weather Recording](/home/totsuka/.gemini/antigravity/brain/0be74aae-38e8-424d-81f1-5a2c3100669f/weather_fix_verification_v2_1772864711086.webp)
 
 ### スクリーンショットでの確認
 ブラウザで実際に表示されたダッシュボードの状態です。
