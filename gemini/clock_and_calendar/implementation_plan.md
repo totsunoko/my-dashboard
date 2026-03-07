@@ -1,21 +1,23 @@
-# 天気アイコンのピクトグラム化計画
+# レスポンシブレイアウトの導入計画
 
-現在の「絵文字＋CSSフィルタ」による天気アイコンを、よりプロフェッショナルで洗練された「Lucide Icons」のピクトグラム（SVG）へ置き換えます。
+「画面の大きさに応じて調整する」という要望に応え、固定のグリッドレイアウトから、デバイスの幅に合わせて動的に変化するレスポンシブデザインへ刷新します。
 
 ## Proposed Changes
 
-### [MODIFY] [index.html](file:///home/totsuka/git_repository/my-dashboard/index.html)
-- Lucide Icons 専用の CDN スクリプトを追加。
-- メインの天気アイコンエリアのマークアップを調整。
-
-### [MODIFY] [js/app.js](file:///home/totsuka/git_repository/my-dashboard/js/app.js)
-- `getWeatherIcon` 関数の戻り値を Lucide のアイコン名（`sun`, `cloud-rain` 等）に変更。
-- `updateWeather` の中で DOM 更新後、`lucide.createIcons()` を実行して SVG を描画する処理を追加。
-
 ### [MODIFY] [css/style.css](file:///home/totsuka/git_repository/my-dashboard/css/style.css)
-- アイコンのサイズと配色（`stroke: white`）を定義。
-- これまで使用していた絵文字用の CSS フィルタを削除。
+- **Fluid Grid**: `.dashboard` の `grid-template-columns` を固定の `repeat(3, 1fr)` から、最小幅 350px 程度の `repeat(auto-fit, minmax(350px, 1fr))` に変更することを検討します。
+- **Media Queries**: 
+  - ワイド画面 (1200px〜): 3列レイアウトを維持、ゆったりとした余白。
+  - タブレット (768px〜1199px): 2列レイアウトに変更。
+  - スマホ (〜767px): 1列レイアウトに変更し、スクロールを縦方向メインに。
+- **Dynamic Sizing**: 
+  - `height: 100vh` を維持しつつ、画面が小さい場合は `overflow-y: auto` をコンテナに持たせ、スクロールで見れるようにします。
+  - 各カードのパディングやフォントサイズに `rem` や `vw` を活用し、スケーリングを改善します。
+
+### [MODIFY] [index.html](file:///home/totsuka/git_repository/my-dashboard/index.html)
+- `viewport` メタタグが正しく設定されていることを再確認します。
 
 ## Verification Plan
-1. ブラウザで開き、天気のアイコンが「絵文字」ではなく「線画のピクトグラム」になっていることを確認。
-2. 3時間ごとの予報や3日間予報のアイコンもすべて統一されたスタイルで表示されているか確認。
+1. ブラウザのデベロッパーツールで、ウィンドウサイズをシームレスに変更し、カードの列数が適切に切り替わるか確認。
+2. スマホサイズ（iPhone SE等）で、カードが縦に並び、操作しやすいサイズに収まっているか確認。
+3. どのサイズでも、前述の「カードの高さが揃わない」問題が発生しないよう、行の高さ指定を工夫します。
