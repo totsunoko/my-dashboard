@@ -168,6 +168,71 @@
             overflow: hidden;
         }
 
+        /* YouTube Music 検索ボックス */
+        .yt-search-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            height: 100%;
+        }
+
+        .yt-search-box {
+            display: flex;
+            gap: 10px;
+        }
+
+        .yt-search-box input {
+            flex: 1;
+            background: #334155;
+            border: 1px solid #475569;
+            border-radius: 10px;
+            padding: 10px 15px;
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .yt-search-box input:focus {
+            border-color: var(--accent);
+        }
+
+        .yt-btn-search {
+            background: var(--accent);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 15px;
+            cursor: pointer;
+            color: var(--bg-color);
+            font-weight: bold;
+        }
+
+        .yt-quick-links {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .yt-link {
+            background: #334155;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            color: white;
+            font-size: 0.8rem;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .yt-link:hover {
+            background: #475569;
+        }
+
         h3 {
             margin-top: 0;
             color: var(--text-sub);
@@ -206,15 +271,22 @@
             </ul>
         </div>
 
-        <div class="card" style="grid-column: span 1; padding: 10px; min-height: 250px;">
+        <div class="card" style="grid-column: span 1; padding: 20px; min-height: 250px;">
             <h3>YouTube Music</h3>
-            <div style="width: 100%; height: 100%; overflow: hidden; border-radius: 12px;">
-                <iframe width="100%" height="100%"
-                    src="https://www.youtube.com/embed/videoseries?list=RDCLAK5uy_m6O3fV6T00T6ZJ5G5D2_G1W2_Y_5Y5Y5Y&autoplay=0&loop=1"
-                    title="YouTube Music Player" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen>
-                </iframe>
+            <div class="yt-search-container">
+                <div class="yt-search-box">
+                    <input type="text" id="yt-search-query" placeholder="検索またはURLを入力..."
+                        onkeydown="if(event.key==='Enter') searchYTMusic()">
+                    <button class="yt-btn-search" onclick="searchYTMusic()">🔍</button>
+                </div>
+                <div class="yt-quick-links">
+                    <a href="https://music.youtube.com/" target="_blank" class="yt-link">🎵 Home</a>
+                    <a href="https://music.youtube.com/explore" target="_blank" class="yt-link">✨ Explore</a>
+                    <a href="https://music.youtube.com/library" target="_blank" class="yt-link">📚 Library</a>
+                    <button class="yt-link" onclick="openYTMusicSearch('Supermix')">💫 Mixed</button>
+                </div>
+                <p style="font-size: 0.7rem; color: var(--text-sub); margin-top: auto; text-align: center;">
+                    Enterキーで検索結果を開きます</p>
             </div>
         </div>
 
@@ -318,6 +390,23 @@
                 div.textContent = i;
                 calendarBody.appendChild(div);
             }
+        }
+
+        function searchYTMusic() {
+            const query = document.getElementById('yt-search-query').value;
+            if (query) {
+                if (query.startsWith('http')) {
+                    window.open(query, '_blank');
+                } else {
+                    window.open(`https://music.youtube.com/search?q=${encodeURIComponent(query)}`, '_blank');
+                }
+            } else {
+                window.open('https://music.youtube.com/', '_blank');
+            }
+        }
+
+        function openYTMusicSearch(keyword) {
+            window.open(`https://music.youtube.com/search?q=${encodeURIComponent(keyword)}`, '_blank');
         }
 
         setInterval(updateTime, 1000);
