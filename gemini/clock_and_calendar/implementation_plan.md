@@ -1,14 +1,29 @@
-# スリープ防止機能の実装計画
+# ファイル分割とリファクタリング計画
 
-ダッシュボードが常に表示されるよう、ブラウザの `Screen Wake Lock API` を利用して画面のスリープを抑制します。
+肥大化した `index.html` を適切に分割し、メンテナンス性を向上させます。
 
 ## Proposed Changes
 
-### JavaScript (index.html)
-- **Wake Lock の取得**: ページ読み込み時に `navigator.wakeLock.request('screen')` を実行。
-- **再取得ロジック**: タブの切り替えや最小化から復帰した際（`visibilitychange` イベント）に、Wake Lock が解除されていれば再度取得するように実装。
-- **エラーハンドリング**: APIが未対応のブラウザや、ユーザー設定により拒否された場合の対応。
+### ディレクトリ構成の変更
+以下の構成に変更します。
+```text
+/my-dashboard/
+  ├── index.html
+  ├── css/
+  │    └── style.css
+  └── js/
+       └── app.js
+```
+
+### [NEW] [style.css](file:///home/totsuka/git_repository/my-dashboard/css/style.css)
+- `index.html` 内の `<style>` ブロックから全CSSを抽出。
+
+### [NEW] [app.js](file:///home/totsuka/git_repository/my-dashboard/js/app.js)
+- `index.html` 内の `<script>` ブロックから全JavaScript（時計、カレンダー、スリープ防止等）を抽出。
+
+### [MODIFY] [index.html](file:///home/totsuka/git_repository/my-dashboard/index.html)
+- 内部の `<style>` および `<script>` タグを削除し、外部ファイルとしてリンクするように変更。
 
 ## Verification Plan
-1. ブラウザのコンソールログで Wake Lock が正常に取得されたことを確認。
-2. ページを放置しても設定上のスリープ時間で画面が消えないことを（ユーザーに提示して）確認。
+1. `python3 -m http.server` を使用して、分割後もデザインや機能（時計、アニメーション、スリープ防止）が正常に動作することを確認。
+2. ブラウザのデベロッパーツールで外部ファイルが正しくロードされていることを確認。
