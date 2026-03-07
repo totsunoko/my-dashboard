@@ -279,7 +279,11 @@
                     <button class="yt-btn-play" onclick="playYTMusic()">再生</button>
                 </div>
                 <div class="yt-embed-area" id="yt-player-frame">
-                    <div class="yt-placeholder">URLを入力して再生ボタンを押してください</div>
+                    <div class="yt-placeholder">
+                        <p>URLを入力して再生ボタンを押してください</p>
+                        <p style="font-size: 0.7rem; color: #64748b; margin-top: 5px;">※一部の楽曲はYouTube
+                            Musicの制限により埋め込み再生できない場合があります</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -396,21 +400,22 @@
             let listId = '';
 
             try {
-                // 正規表現でIDを抽出
-                const videoMatch = urlInput.match(/(?:v=|youtu\.be\/|embed\/)([^?&]+)/);
+                // より広範なURL形式からIDを抽出
+                const videoMatch = urlInput.match(/(?:v=|\/embed\/|\/watch\?v=|\/v\/|youtu\.be\/|music\.youtube\.com\/watch\?v=)([^?&"'>]+)/);
                 videoId = videoMatch ? videoMatch[1] : '';
 
-                const listMatch = urlInput.match(/[?&]list=([^?&]+)/);
+                const listMatch = urlInput.match(/[?&]list=([^?&"'>]+)/);
                 listId = listMatch ? listMatch[1] : '';
             } catch (e) {
                 console.error('URL parse error', e);
             }
 
             let embedUrl = '';
+            // www.youtube-nocookie.com を使用して互換性を向上
             if (listId) {
-                embedUrl = `https://www.youtube.com/embed/videoseries?list=${listId}&autoplay=1`;
+                embedUrl = `https://www.youtube-nocookie.com/embed/videoseries?list=${listId}&autoplay=1&modestbranding=1&rel=0`;
             } else if (videoId) {
-                embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&modestbranding=1&rel=0`;
             }
 
             if (embedUrl) {

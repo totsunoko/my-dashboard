@@ -1,17 +1,15 @@
-# YouTube Musicカードの再設計計画 (URL再生方式)
+# YouTube Musicカードの再生エラー修正計画
 
-YouTube Musicの曲やプレイリストのURLを直接貼り付けて、ダッシュボード上で再生できるようにします。
+YouTube Musicの一部コンテンツで「この動画は再生できません」と表示される問題に対し、埋め込み設定の最適化とパースの強化を行います。
 
 ## Proposed Changes
 
-### YouTube Music カードの刷新
+### 埋め込みプレイヤーの改善
 - **[MODIFY] [index.html](file:///home/totsuka/git_repository/my-dashboard/index.html)**
-    - 検索ランチャーを廃止し、URL入力欄と「再生」ボタンを配置します。
-    - 入力されたYouTube MusicのURLを、埋め込み可能な `iframe` 用のURLに自動変換する機能を追加します。
-    - 変換対象:
-        - 曲 (`watch?v=...`) -> `/embed/...`
-        - プレイリスト (`playlist?list=...`) -> `/embed/videoseries?list=...`
-    - 再生エリア（iframe）をカード内に常設、またはURL入力後に表示するようにします。
+    - 埋め込みドメインを `www.youtube-nocookie.com` に変更し、プライバシーと互換性を向上させます。
+    - URL抽出ロジックをより堅牢な正規表現に更新し、あらゆる形式の共有URLに対応させます。
+    - `autoplay=1` による再生不可（ブラウザ制限）を避けるため、パラメータの構成を見直します。
+    - 埋め込み制限（著作権上の理由など）がある場合のヒントを表示するようにします。
 
 ## Verification Plan
 1. 通常のYouTube Musicの曲URLを貼り付けて「再生」を押し、プレイヤーが表示され再生できるか確認。
