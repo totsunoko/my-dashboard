@@ -62,6 +62,67 @@ function updateCalendar() {
     }
 }
 
+// --- Weather implementation (Shinjuku) ---
+async function updateWeather() {
+    const lat = 35.6895;
+    const lon = 139.6917;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&hourly=temperature_2m,weather_code&timezone=Asia%2FTokyo&forecast_days=1`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        // Mapping weather codes to emojis
+        const getWeatherIcon = (code) => {
+            if (code === 0) return '☀️'; // Clear sky
+            if ([1, 2, 3].includes(code)) return '🌤️'; // Partly cloudy
+            if ([45, 48].includes(code)) return '🌫️'; // Fog
+            if ([51, 53, 55].includes(code)) return '🌦️'; // Drizzle
+            if ([61, 63, 65].includes(code)) return '🌧️'; // Rain
+            if ([71, 73, 75, 77].includes(code)) return '❄️'; // Snow
+            if ([80, 81, 82].includes(code)) return '⛈️'; // Showers
+            if ([95, 96, 99].includes(code)) return '🌩️'; // Thunderstorm
+            return '❓';
+        };
+
+        // Current weather
+        document.getElementById('weather-main-icon').textContent = getWeatherIcon(data.current.weather_code);
+        document.getElementById('weather-main-temp').textContent = `${Math.round(data.current.temperature_2m)}°`;
+
+        // Hourly forecast (next 4 intervals, 3 hours apart)
+        const forecastList = document.getElementById('weather-forecast-list');
+        forecastList.innerHTML = '';
+
+        const now = new Date();
+        const currentHour = now.getHours();
+
+        // Find next 4 intervals (3 hours each)
+        for (let i = 1; i <= 4; i++) {
+            const targetHour = (currentHour + i * 3) % 24;
+            // Find index in hourly data
+            // Open-Meteo returns 24 hours starting from 0:00
+            const index = targetHour;
+
+            const timeStr = `${targetHour}:00`;
+            const temp = Math.round(data.hourly.temperature_2m[index]);
+            const icon = getWeatherIcon(data.hourly.weather_code[index]);
+
+            const item = document.createElement('div');
+            item.className = 'forecast-hour';
+            item.innerHTML = `
+                <div class="forecast-time">${timeStr}</div>
+                <div class="forecast-icon">${icon}</div>
+                <div class="forecast-temp">${temp}°</div>
+            `;
+            forecastList.appendChild(item);
+        }
+
+        console.log('Weather updated for Shinjuku');
+    } catch (err) {
+        console.error('Failed to fetch weather:', err);
+    }
+}
+
 // --- Screen Wake Lock implementation ---
 let wakeLock = null;
 
@@ -110,6 +171,8 @@ function init() {
     setInterval(updateTime, 1000);
     updateTime();
     updateCalendar();
+    updateWeather(); // Fetch weather
+    setInterval(updateWeather, 3600000); // Refresh hourly
     requestWakeLock();
     startPixelShift();
 
