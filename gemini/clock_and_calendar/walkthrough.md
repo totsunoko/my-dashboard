@@ -45,6 +45,15 @@
 - **レイアウトの最適化**: 鉄道セクションを削除し、ニュースリストに割くスペースを広げることで、より多くの見出しを視認できるようにしました。
 - **動的更新**: 30分おきに自動でニュースを更新します。
 
+### ニュースの外部データ連携の確認
+Google ニュースから取得した最新のヘッドラインが動的に表示されていることを確認しました。
+
+![News Integration Check](/home/totsuka/.gemini/antigravity/brain/0be74aae-38e8-424d-81f1-5a2c3100669f/news_card_verification_1772871209281.png)
+
+### 動作確認の記録
+ニュースの取得と鉄道セクションの削除を確認した際の記録です。
+![News Integration Recording](/home/totsuka/.gemini/antigravity/brain/0be74aae-38e8-424d-81f1-5a2c3100669f/news_integration_verification_1772871161656.webp)
+
 ## 検証結果
 
 ### モノクロアイコンの確認
