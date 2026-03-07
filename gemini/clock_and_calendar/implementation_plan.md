@@ -1,15 +1,21 @@
-# YouTube Musicカードの再設計計画
+# YouTube Musicカードの再設計計画 (URL再生方式)
 
-特定のプレイリストを固定で表示するのではなく、YouTube Musicを便利に起動・検索できるインターフェースに変更します。
+YouTube Musicの曲やプレイリストのURLを直接貼り付けて、ダッシュボード上で再生できるようにします。
 
 ## Proposed Changes
 
 ### YouTube Music カードの刷新
 - **[MODIFY] [index.html](file:///home/totsuka/git_repository/my-dashboard/index.html)**
-    - 既存の `iframe` を削除します。
-    - 検索ボックス（input）と「YouTube Musicで開く」ボタン、および主要なカテゴリ（Music, Relax, Focusなど）へのクイックリンクボタンを追加します。
-    - カードのデザインを、他のコントロールカード（Smart Home Controlなど）と調和するように調整します。
-    - 検索ボックスにキーワードを入力してEnterを押すと、YouTube Musicの検索結果ページが別タブで開くようにします。
+    - 検索ランチャーを廃止し、URL入力欄と「再生」ボタンを配置します。
+    - 入力されたYouTube MusicのURLを、埋め込み可能な `iframe` 用のURLに自動変換する機能を追加します。
+    - 変換対象:
+        - 曲 (`watch?v=...`) -> `/embed/...`
+        - プレイリスト (`playlist?list=...`) -> `/embed/videoseries?list=...`
+    - 再生エリア（iframe）をカード内に常設、またはURL入力後に表示するようにします。
+
+## Verification Plan
+1. 通常のYouTube Musicの曲URLを貼り付けて「再生」を押し、プレイヤーが表示され再生できるか確認。
+2. プレイリストURLを貼り付けて、プレイリストとして読み込まれるか確認。
 
 ## Verification Plan
 
