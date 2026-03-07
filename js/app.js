@@ -154,7 +154,7 @@ async function updateWeather() {
 
                 item.innerHTML = `
                     <div style="width: 50px; color: var(--text-sub);">${dayLabels[i]}</div>
-                    <div style="font-size: 1.2rem;">${icon}</div>
+                    <div class="daily-item-icon">${icon}</div>
                     <div style="display: flex; gap: 10px; width: 80px; justify-content: flex-end;">
                         <span style="color: #ff6b6b;">${maxTemp}°</span>
                         <span style="color: #4dabf7; opacity: 0.7;">${minTemp}°</span>
