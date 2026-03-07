@@ -46,6 +46,7 @@ function updateCalendar() {
     for (let i = 1; i <= daysInMonth; i++) {
         const cell = document.createElement('div');
         cell.className = 'cal-cell';
+        cell.id = `day-${i}`;
         if (i === now.getDate()) cell.classList.add('cal-today');
         cell.textContent = i;
         calGrid.appendChild(cell);
