@@ -36,10 +36,14 @@
 - **ライブデータの統合**: Open-Meteo API と連携し、現在の気温・天気に加え、3時間ごとの予報をリアルタイムに取得・表示するようにしました。
 - **自動更新**: 1時間ごとに最新の気象情報を自動取得します。
 
-## 検証結果
-- レイアウトが画像と一致していることを確認。
-- 時計のアニメーションが正常に動作することを確認。
-- ダークテーマの視認性が向上。
+### リアルタイム天気予報（新宿）の確認
+新宿の座標に基づき、Open-Meteo API から取得したライブデータが表示されています。
+
+![Shinjuku Weather](/home/totsuka/.gemini/antigravity/brain/0be74aae-38e8-424d-81f1-5a2c3100669f/shinjuku_weather_card_1772863336513.png)
+
+### 動作確認の記録
+データのロードと表示を確認した際の記録です。
+![Shinjuku Weather Recording](/home/totsuka/.gemini/antigravity/brain/0be74aae-38e8-424d-81f1-5a2c3100669f/shinjuku_weather_verification_1772863281418.webp)
 
 ### スクリーンショットでの確認
 ブラウザで実際に表示されたダッシュボードの状態です。
