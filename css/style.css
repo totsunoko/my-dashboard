@@ -341,18 +341,21 @@ body {
 /* --- Calendar Card --- */
 .calendar-grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: auto 1fr;
-    gap: 10px;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows: auto auto;
+    gap: 5px;
+    /* さらに狭める */
     height: 100%;
 }
 
 .cal-head {
     color: var(--text-sub);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    /* 少し小さく */
     font-weight: 500;
     text-align: center;
-    padding-bottom: 15px;
+    padding-bottom: 8px;
+    /* 15pxから大幅に縮小 */
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -360,10 +363,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
-    border-radius: 14px;
+    font-size: 0.9rem;
+    /* さらに縮小 */
+    border-radius: 50%;
+    /* 正円に近いデザインへ */
     aspect-ratio: 1;
     transition: 0.2s;
+    min-width: 0;
+    /* 折り返しやはみ出しを防止 */
 }
 
 .cal-today {
