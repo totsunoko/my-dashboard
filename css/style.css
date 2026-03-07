@@ -150,10 +150,15 @@ body {
 }
 
 .weather-main-icon {
-    font-size: 5.5rem;
     margin-bottom: 10px;
-    filter: grayscale(100%) brightness(200%);
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.weather-main-icon svg {
+    width: 80px;
+    height: 80px;
+    stroke-width: 1.5;
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.2));
 }
 
 .weather-temp-large {
@@ -179,9 +184,14 @@ body {
 }
 
 .forecast-icon {
-    font-size: 1.8rem;
     margin-bottom: 8px;
-    filter: grayscale(100%) brightness(200%);
+    color: #fff;
+}
+
+.forecast-icon svg {
+    width: 28px;
+    height: 28px;
+    stroke-width: 2;
 }
 
 .forecast-temp {
@@ -190,8 +200,13 @@ body {
 }
 
 .daily-item-icon {
-    filter: grayscale(100%) brightness(200%);
-    font-size: 1.2rem;
+    color: #fff;
+}
+
+.daily-item-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2;
 }
 
 /* --- Train & News List Card --- */

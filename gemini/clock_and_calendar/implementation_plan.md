@@ -1,19 +1,21 @@
-# レイアウトの最適化とカードサイズの統一計画
+# 天気アイコンのピクトグラム化計画
 
-ダッシュボード全体の統一感を高めるため、カードのサイズ（特に高さ）を揃え、整然とした外観に修正します。
+現在の「絵文字＋CSSフィルタ」による天気アイコンを、よりプロフェッショナルで洗練された「Lucide Icons」のピクトグラム（SVG）へ置き換えます。
 
 ## Proposed Changes
 
-### [MODIFY] [css/style.css](file:///home/totsuka/git_repository/my-dashboard/css/style.css)
-- **グリッドの再定義**: `.dashboard` コンテナの `grid-template-rows` を調整し、各行のカードが同じ高さになるように固定または比率指定します。
-- **カードの定数化**: `.card` クラスに `height: 100%` を付与し、セルいっぱいに広がるようにします。
-- **コンテンツの溢れ防止**: ニュースや天気など、コンテンツ量が変わるカードには `overflow-y: auto` などを適切に設定し、サイズが壊れないようにします。
-- **パディングの統一**: 各カード内部の余白を再定義し、見た目のバランスを整えます。
-
 ### [MODIFY] [index.html](file:///home/totsuka/git_repository/my-dashboard/index.html)
-- 必要に応じて、カードの配置（スパンなど）を微調整し、黄金比に近い美しいレイアウトを目指します。
+- Lucide Icons 専用の CDN スクリプトを追加。
+- メインの天気アイコンエリアのマークアップを調整。
+
+### [MODIFY] [js/app.js](file:///home/totsuka/git_repository/my-dashboard/js/app.js)
+- `getWeatherIcon` 関数の戻り値を Lucide のアイコン名（`sun`, `cloud-rain` 等）に変更。
+- `updateWeather` の中で DOM 更新後、`lucide.createIcons()` を実行して SVG を描画する処理を追加。
+
+### [MODIFY] [css/style.css](file:///home/totsuka/git_repository/my-dashboard/css/style.css)
+- アイコンのサイズと配色（`stroke: white`）を定義。
+- これまで使用していた絵文字用の CSS フィルタを削除。
 
 ## Verification Plan
-1. ブラウザで開き、上下左右のカードが綺麗に整列していることを確認。
-2. 画面をリサイズしても、カード同士の高さの不一致が発生しないか確認。
-3. ニュース項目が増えても、カードが突き抜けたり伸びたりしないか確認。
+1. ブラウザで開き、天気のアイコンが「絵文字」ではなく「線画のピクトグラム」になっていることを確認。
+2. 3時間ごとの予報や3日間予報のアイコンもすべて統一されたスタイルで表示されているか確認。

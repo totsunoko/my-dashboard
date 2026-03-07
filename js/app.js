@@ -73,21 +73,23 @@ async function updateWeather() {
         const response = await fetch(url);
         const data = await response.json();
 
-        // Mapping weather codes to emojis
+        // Mapping weather codes to Lucide icons
         const getWeatherIcon = (code) => {
-            if (code === 0) return '☀️'; // Clear sky
-            if ([1, 2, 3].includes(code)) return '🌤️'; // Partly cloudy
-            if ([45, 48].includes(code)) return '🌫️'; // Fog
-            if ([51, 53, 55].includes(code)) return '🌦️'; // Drizzle
-            if ([61, 63, 65].includes(code)) return '🌧️'; // Rain
-            if ([71, 73, 75, 77].includes(code)) return '❄️'; // Snow
-            if ([80, 81, 82].includes(code)) return '⛈️'; // Showers
-            if ([95, 96, 99].includes(code)) return '🌩️'; // Thunderstorm
-            return '❓';
+            if (code === 0) return 'sun'; // Clear sky
+            if ([1, 2, 3].includes(code)) return 'cloud-sun'; // Partly cloudy
+            if ([45, 48].includes(code)) return 'cloud-fog'; // Fog
+            if ([51, 53, 55].includes(code)) return 'cloud-drizzle'; // Drizzle
+            if ([61, 63, 65].includes(code)) return 'cloud-rain'; // Rain
+            if ([71, 73, 75, 77].includes(code)) return 'cloud-snow'; // Snow
+            if ([80, 81, 82].includes(code)) return 'cloud-lightning'; // Showers
+            if ([95, 96, 99].includes(code)) return 'cloud-lightning'; // Thunderstorm
+            return 'help-circle';
         };
 
+        const renderIcon = (name) => `<i data-lucide="${name}"></i>`;
+
         // Current weather
-        document.getElementById('weather-main-icon').textContent = getWeatherIcon(data.current.weather_code);
+        document.getElementById('weather-main-icon').innerHTML = renderIcon(getWeatherIcon(data.current.weather_code));
         document.getElementById('weather-main-temp').textContent = `${Math.round(data.current.temperature_2m)}°`;
 
         // Rain probability (using the current hour's probability)
@@ -117,13 +119,13 @@ async function updateWeather() {
                     const timeStr = `${targetHour}:00`;
                     const temp = Math.round(data.hourly.temperature_2m[index]);
                     const prob = data.hourly.precipitation_probability[index];
-                    const icon = getWeatherIcon(data.hourly.weather_code[index]);
+                    const iconName = getWeatherIcon(data.hourly.weather_code[index]);
 
                     const item = document.createElement('div');
                     item.className = 'forecast-hour';
                     item.innerHTML = `
                         <div class="forecast-time">${timeStr}</div>
-                        <div class="forecast-icon">${icon}</div>
+                        <div class="forecast-icon">${renderIcon(iconName)}</div>
                         <div class="forecast-temp">${temp}°</div>
                         <div style="font-size:0.6rem; color:var(--accent); margin-top:4px;">${prob}%</div>
                     `;
@@ -141,7 +143,7 @@ async function updateWeather() {
             for (let i = 0; i < 3; i++) {
                 const maxTemp = Math.round(data.daily.temperature_2m_max[i]);
                 const minTemp = Math.round(data.daily.temperature_2m_min[i]);
-                const icon = getWeatherIcon(data.daily.weather_code[i]);
+                const iconName = getWeatherIcon(data.daily.weather_code[i]);
 
                 const item = document.createElement('div');
                 item.className = 'daily-item';
@@ -154,7 +156,7 @@ async function updateWeather() {
 
                 item.innerHTML = `
                     <div style="width: 50px; color: var(--text-sub);">${dayLabels[i]}</div>
-                    <div class="daily-item-icon">${icon}</div>
+                    <div class="daily-item-icon">${renderIcon(iconName)}</div>
                     <div style="display: flex; gap: 10px; width: 80px; justify-content: flex-end;">
                         <span style="color: #ff6b6b;">${maxTemp}°</span>
                         <span style="color: #4dabf7; opacity: 0.7;">${minTemp}°</span>
@@ -164,7 +166,12 @@ async function updateWeather() {
             }
         }
 
-        console.log('Weather updated for Shinjuku (Real-time & 3-Day)');
+        // Initialize Lucide icons
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+
+        console.log('Weather updated for Shinjuku (Real-time & 3-Day) with Lucide icons');
     } catch (err) {
         console.error('Failed to fetch weather:', err);
     }
