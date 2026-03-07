@@ -170,6 +170,34 @@ async function updateWeather() {
     }
 }
 
+// --- News implementation (Google News RSS) ---
+async function updateNews() {
+    const rssUrl = encodeURIComponent('https://news.google.com/rss?hl=ja&gl=JP&ceid=JP:ja');
+    const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`;
+
+    try {
+        const response = await fetch(proxyUrl);
+        const data = await response.json();
+
+        if (data.status === 'ok') {
+            const newsList = document.getElementById('news-list');
+            if (newsList) {
+                newsList.innerHTML = '';
+                // Display up to 8 news items
+                data.items.slice(0, 8).forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = 'news-row';
+                    row.textContent = item.title;
+                    newsList.appendChild(row);
+                });
+                console.log('News updated');
+            }
+        }
+    } catch (err) {
+        console.error('Failed to fetch news:', err);
+    }
+}
+
 // --- Screen Wake Lock implementation ---
 let wakeLock = null;
 
@@ -219,7 +247,11 @@ function init() {
     updateTime();
     updateCalendar();
     updateWeather(); // Fetch weather
-    setInterval(updateWeather, 3600000); // Refresh hourly
+    setInterval(updateWeather, 3600000); // Refresh weather hourly
+
+    updateNews(); // Fetch news
+    setInterval(updateNews, 1800000); // Refresh news every 30 mins
+
     requestWakeLock();
     startPixelShift();
 

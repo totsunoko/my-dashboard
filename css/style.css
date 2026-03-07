@@ -255,18 +255,28 @@ body {
 }
 
 .news-container {
-    margin-top: auto;
+    margin-top: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .news-row {
     background: rgba(255, 255, 255, 0.03);
     border-radius: 12px;
     padding: 14px 20px;
-    margin-bottom: 10px;
     font-size: 0.95rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    border-left: 3px solid transparent;
+    transition: 0.2s;
+}
+
+.news-row:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-left: 3px solid var(--accent);
 }
 
 /* --- Calendar Card --- */
