@@ -36,26 +36,28 @@
 - **ライブデータの統合**: Open-Meteo API と連携し、現在の気温・天気に加え、3時間ごとの予報をリアルタイムに取得・表示するようにしました。
 - **自動更新**: 1時間ごとに最新の気象情報を自動取得します。
 
-### リアルタイム天気予報（新宿）の修正・拡充
-日付を跨ぐ際のインデックス計算バグを修正し、利便性向上のために以下の情報を追加しました。
-- **降水確率**: 現在および時間別の降水確率を表示。
-- **3日間予報**: 今日・明日・明後日の最高・最低気温と天気をカード下部に追加。
+### 8. 天気予報アイコンのモノクロ化
+- **デザインの統一**: カラーの絵文字を避け、CSSフィルタ（グレースケールと輝度調整）を適用することで、すべての天気アイコンを白一色のトーンに統一しました。
+- **視覚的プレミアム感**: ダークテーマの背景に馴染む、落ち着いたモダンな外観を実現しました。
 
+## 検証結果
+
+### モノクロアイコンの確認
+すべての天気アイコンが、白を基調としたモノトーンデザインに変更されていることを確認しました。
+![Monochrome Icons Check](/home/totsuka/.gemini/antigravity/brain/0be74aae-38e8-424d-81f1-5a2c3100669f/weather_card_monochrome_final_check_1772865362709.png)
+
+### リアルタイム天気予報（新宿）の修正・拡充
+降水確率と3日間予報を追加した、最終的な構成です。
 ![Final Weather Check](/home/totsuka/.gemini/antigravity/brain/0be74aae-38e8-424d-81f1-5a2c3100669f/shinjuku_weather_card_final_check_1772864736729.png)
 
-### 動作確認の記録
-修正後のデータ取得と表示の安定性を確認した記録です。
-![Final Weather Recording](/home/totsuka/.gemini/antigravity/brain/0be74aae-38e8-424d-81f1-5a2c3100669f/weather_fix_verification_v2_1772864711086.webp)
-
 ### スクリーンショットでの確認
-ブラウザで実際に表示されたダッシュボードの状態です。
-
+ブラウザで実際に表示されたダッシュボードの全体像です。
 ![Redesigned Dashboard](/home/totsuka/.gemini/antigravity/brain/0be74aae-38e8-424d-81f1-5a2c3100669f/dashboard_design_check_1772859822065.png)
 
 ### 操作・アニメーションの確認
-時計のボーダーアニメーションや全体の表示を確認した際の記録です。
+時計のボーダーアニメーション等の記録です。
 ![Verification Recording](/home/totsuka/.gemini/antigravity/brain/0be74aae-38e8-424d-81f1-5a2c3100669f/design_verification_v3_http_1772859800456.webp)
 
 ## 今後の展望
-- 天気情報の実際のAPI連携（現在は画像の値を優先）の微調整。
+- 天気情報の実際のAPI連携の微調整。
 - 音楽プレーヤーの実際のYouTube API連携による操作。
