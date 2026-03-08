@@ -54,15 +54,15 @@ body {
 }
 
 .fused-card {
-    grid-column: span 2;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    grid-column: span 1;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .fused-event-card {
     grid-column: span 1;
-    /* カレンダー＆予定は1列分 (縦長または密度高め) */
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* --- Responsive Breakpoints --- */
@@ -179,20 +179,20 @@ body {
 /* --- Fused Card Internal --- */
 .fused-main-info {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    padding-bottom: 30px;
+    text-align: center;
+    padding-bottom: 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    margin-bottom: 25px;
-    flex-wrap: wrap;
-    gap: 30px;
+    margin-bottom: 20px;
+    gap: 15px;
 }
 
 .fused-clock-section h1 {
-    font-size: 5.5rem;
+    font-size: 4.5rem;
     margin: 0;
     font-weight: 200;
-    letter-spacing: -3px;
+    letter-spacing: -2px;
     color: #fff;
 }
 
@@ -209,7 +209,7 @@ body {
 }
 
 .weather-now-stats {
-    text-align: right;
+    text-align: center;
 }
 
 .weather-main-temp {
@@ -235,9 +235,9 @@ body {
 }
 
 .fused-forecast-section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 @media (max-width: 900px) {
@@ -247,8 +247,10 @@ body {
 }
 
 .weather-daily-list {
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
-    padding-left: 20px;
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 15px;
+    padding-left: 0;
 }
 
 @media (max-width: 900px) {
