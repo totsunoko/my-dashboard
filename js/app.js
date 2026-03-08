@@ -180,32 +180,100 @@ async function updateWeather() {
     }
 }
 
-// --- News implementation (Google News RSS) ---
-async function updateNews() {
+// --- News & Market Ticker implementation ---
+async function updateTicker() {
+    const tickerEl = document.getElementById('global-ticker');
+    if (!tickerEl) return;
+
+    // Fetch News (already using rss2json proxy)
     const rssUrl = encodeURIComponent('https://news.google.com/rss?hl=ja&gl=JP&ceid=JP:ja');
-    const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`;
+    const newsProxy = `https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`;
+    
+    // Fetch Crypto (CoinGecko Simple Price)
+    const cryptoUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=jpy&include_24hr_change=true';
 
     try {
-        const response = await fetch(proxyUrl);
-        const data = await response.json();
+        const [newsRes, cryptoRes] = await Promise.all([
+            fetch(newsProxy),
+            fetch(cryptoUrl)
+        ]);
+        
+        const newsData = await newsRes.json();
+        const cryptoData = await cryptoRes.json();
 
-        if (data.status === 'ok') {
-            const newsList = document.getElementById('news-list');
-            if (newsList) {
-                newsList.innerHTML = '';
-                // Display up to 8 news items
-                data.items.slice(0, 8).forEach(item => {
-                    const row = document.createElement('div');
-                    row.className = 'news-row';
-                    row.textContent = item.title;
-                    newsList.appendChild(row);
-                });
-                console.log('News updated');
-            }
+        let tickerItems = [];
+
+        // News Items
+        if (newsData.status === 'ok') {
+            newsData.items.slice(0, 10).forEach(item => {
+                tickerItems.push(`📰 ${item.title}`);
+            });
         }
+
+        // Crypto Items
+        if (cryptoData) {
+            const btc = cryptoData.bitcoin;
+            const eth = cryptoData.ethereum;
+            tickerItems.push(`₿ BTC: ¥${btc.jpy.toLocaleString()} (${btc.jpy_24h_change.toFixed(2)}%)`);
+            tickerItems.push(`Ξ ETH: ¥${eth.jpy.toLocaleString()} (${eth.jpy_24h_change.toFixed(2)}%)`);
+        }
+
+        // Join with spacing and update DOM
+        tickerEl.innerHTML = `<div class="ticker__item">${tickerItems.join('　　|　　')}</div>`;
+        
     } catch (err) {
-        console.error('Failed to fetch news:', err);
+        console.error('Ticker update failed:', err);
     }
+}
+
+// --- Intelligent Agent implementation ---
+function updateAgent() {
+    const msgEl = document.getElementById('agent-msg');
+    const now = new Date();
+    const hour = now.getHours();
+    
+    let message = "こんにちは。何かお手伝いしましょうか？";
+
+    if (hour >= 5 && hour < 11) message = "おはようございます。今日の天気は... 傘の準備は大丈夫ですか？";
+    else if (hour >= 11 && hour < 14) message = "お昼の時間ですね。近くの美味しいお店を探しましょうか？";
+    else if (hour >= 14 && hour < 18) message = "午後のひと時。コーヒーでもいかがですか？";
+    else if (hour >= 18 && hour < 22) message = "お疲れ様です。リラックスできる音楽をかけましょうか。";
+    else message = "夜が更けてきました。今日もお疲れ様でした。";
+
+    if (msgEl) msgEl.textContent = message;
+}
+
+// --- Public Transport (Mock) implementation ---
+function updateTransport() {
+    const transportEl = document.getElementById('transport-delays');
+    if (!transportEl) return;
+
+    // Fake delay scenario
+    const lines = [
+        { tag: 'JY', name: '山手線', code: '#00b261', status: '平常運転', ok: true },
+        { tag: 'JC', name: '中央線快速', code: '#f15a22', status: '強風による遅延', ok: false },
+        { tag: 'JS', name: '湘南新宿ライン', code: '#f34739', status: '平常運転', ok: true },
+        { tag: 'G', name: '銀座線', code: '#ff9500', status: '平常運転', ok: true }
+    ];
+
+    transportEl.innerHTML = lines.map(line => `
+        <div class="transport-row ${line.ok ? 'status-ok' : 'status-delay'}">
+            <span class="line-tag" style="background: ${line.code};">${line.tag}</span>
+            <span class="line-name">${line.name}</span>
+            <span class="line-status">${line.status}</span>
+        </div>
+    `).join('');
+}
+
+// --- Smart Home logic ---
+function setupSmartHome() {
+    const switches = document.querySelectorAll('.smarthome-card input[type="checkbox"]');
+    switches.forEach(sw => {
+        sw.addEventListener('change', (e) => {
+            const label = e.target.parentElement.parentElement.querySelector('span').textContent;
+            console.log(`SmartHome: ${label} turned ${e.target.checked ? 'ON' : 'OFF'}`);
+        });
+    });
 }
 
 // --- Screen Wake Lock implementation ---
@@ -216,7 +284,6 @@ const requestWakeLock = async () => {
         if ('wakeLock' in navigator) {
             wakeLock = await navigator.wakeLock.request('screen');
             console.log('Wake Lock is active');
-
             wakeLock.addEventListener('release', () => {
                 console.log('Wake Lock was released');
             });
@@ -239,16 +306,14 @@ function startPixelShift() {
     if (!dashboard) return;
 
     const shift = () => {
-        // -3px 〜 3px の間でランダムに移動
         const x = (Math.random() - 0.5) * 6;
         const y = (Math.random() - 0.5) * 6;
         dashboard.style.transform = `translate(${x}px, ${y}px)`;
         console.log(`Pixel shift applied: ${x.toFixed(2)}px, ${y.toFixed(2)}px`);
     };
 
-    // 1分ごとに移動
     setInterval(shift, 60000);
-    shift(); // 初回実行
+    shift();
 }
 
 // Initialize
@@ -256,29 +321,26 @@ function init() {
     setInterval(updateTime, 1000);
     updateTime();
     updateCalendar();
-    updateWeather(); // Fetch weather
-    setInterval(updateWeather, 3600000); // Refresh weather hourly
+    
+    updateWeather();
+    setInterval(updateWeather, 3600000); // Hourly
 
-    updateNews(); // Fetch news
-    setInterval(updateNews, 1800000); // Refresh news every 30 mins
+    updateTicker();
+    setInterval(updateTicker, 600000); // 10 mins
 
+    updateAgent();
+    setInterval(updateAgent, 1800000); // 30 mins
+
+    updateTransport();
+    setInterval(updateTransport, 900000); // 15 mins
+
+    setupSmartHome();
     requestWakeLock();
     startPixelShift();
 
-    // Browser support for Border Animation (Chrome/Edge)
-    if (window.CSS && CSS.registerProperty) {
-        CSS.registerProperty({
-            name: '--angle',
-            syntax: '<angle>',
-            initialValue: '0deg',
-            inherits: false
-        });
-    } else {
-        // Fallback for Firefox/Safari
-        const clockCard = document.querySelector('.clock-card');
-        if (clockCard) {
-            clockCard.style.animation = 'rotate-fallback 4s linear infinite';
-        }
+    // Lucide initialization
+    if (window.lucide) {
+        lucide.createIcons();
     }
 }
 

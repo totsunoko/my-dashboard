@@ -1,19 +1,42 @@
-# Plan - Unify Card Sizes
+# 実装計画 - ダッシュボード拡張 (4種類の新カード追加)
 
-The goal is to make all dashboard cards (including the fused Weather & Clock and Calendar & Schedule cards) the same size by ensuring they all occupy exactly one grid column.
+ダッシュボードに4つの新しい機能カードを追加し、利便性とプレミアム感を向上させます。
 
-## Proposed Changes
+## 追加するカード
+
+1.  **インテリジェント・エージェント (#1)**
+    - 言語対話機能のプロトタイプとして、状況に応じたメッセージを表示。
+    - **デザイン**: 抽象的なエージェント・アイコンと親しみやすいメッセージ。
+2.  **公共交通情報 (#2)**
+    - 都内の路線名と運行状況（遅延情報）のみを表示。
+    - **デザイン**: 交通各社のカラーを活かし、遅延が発生している路線を強調するリスト。
+3.  **スマートホーム・コントロール (#5)**
+    - 照明やエアコンの管理用ダミーボタン。
+    - **デザイン**: ガラスモフィズムを採用したトグルスイッチ。
+4.  **ニュース & マーケット・ティッカー (統合)**
+    - ニュースと仮想通貨/株価を1つのリストに統合。
+    - **デザイン**: カード内またはダッシュボード下部等で、テキストが1行で横に流れる（マーキー風）アニメーション。
+5.  **横長表示（Landscape）の最適化**
+    - 画面が横長のときはスクロールが発生しない（1画面に収まる）ように高さを調整。
+
+## 変更予定ファイル
+
+### [HTML] [index.html](file:///home/totsu/my-dashboard/index.html)
+- 4つの新しいカード構造を追加。
+- グリッドの順序を整理（合計8枚のカード）。
 
 ### [CSS] [style.css](file:///home/totsu/my-dashboard/css/style.css)
-- **Grid Layout**: Change `.fused-card` to `grid-column: span 1`.
-- **Weather & Clock**:
-    - Adjust `.fused-main-info` to use `flex-direction: column` and center alignment to fit the narrower width.
-    - Adjust `.fused-forecast-section` to `grid-template-columns: 1fr` to stack hourly and daily forecasts.
-- **Calendar & Schedule**:
-    - Ensure it fits well within the standard card dimensions (it already spans 1, but might need padding adjustments).
-- **Styling Consistency**:
-    - Standardize background gradients and borders across all cards to look "unified".
+- 各カード固有のスタイルを追加（トグルスイッチ、エージェントアニメーション、ネオンエフェクト等）。
+- `grid-template-columns` の調整。
 
-## Verification Plan
-- **Pre-visual Check**: Review CSS rules to ensure no overflow occurs in the narrower cards.
-- **Manual Verification**: The user will need to refresh their browser to confirm the new layout looks balanced.
+### [JS] [app.js](file:///home/totsu/my-dashboard/js/app.js)
+- エージェントのメッセージ更新ロジック。
+- 交通情報・マーケット情報のダミーデータ更新。
+
+## 検証計画
+- **UI/UXチェック**:
+    - 全てのカードが統一されたサイズで正しく並んでいるか。
+    - 各カードのデザインが「プレミアム」な雰囲気を維持しているか。
+- **機能チェック**:
+    - エージェントのメッセージが時間や状況で切り替わるか。
+    - トグルスイッチが（画面上で）動作するか。
