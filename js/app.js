@@ -68,7 +68,7 @@ async function updateWeather() {
     const lat = 35.6895;
     const lon = 139.6917;
     // Requesting 3 days of hourly and daily data
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code&hourly=temperature_2m,precipitation_probability,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&forecast_days=3`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code&hourly=temperature_2m,precipitation_probability,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FTokyo&forecast_days=3`;
 
     try {
         const response = await fetch(url);
@@ -144,6 +144,7 @@ async function updateWeather() {
             for (let i = 0; i < 3; i++) {
                 const maxTemp = Math.round(data.daily.temperature_2m_max[i]);
                 const minTemp = Math.round(data.daily.temperature_2m_min[i]);
+                const rainProb = data.daily.precipitation_probability_max[i];
                 const iconName = getWeatherIcon(data.daily.weather_code[i]);
 
                 const item = document.createElement('div');
@@ -158,6 +159,7 @@ async function updateWeather() {
                 item.innerHTML = `
                     <div style="width: 50px; color: var(--text-sub);">${dayLabels[i]}</div>
                     <div class="daily-item-icon">${renderIcon(iconName)}</div>
+                    <div style="font-size: 0.75rem; color: var(--accent); min-width: 40px; text-align: center;">${rainProb}%</div>
                     <div style="display: flex; gap: 10px; width: 80px; justify-content: flex-end;">
                         <span style="color: #ff6b6b;">${maxTemp}°</span>
                         <span style="color: #4dabf7; opacity: 0.7;">${minTemp}°</span>
